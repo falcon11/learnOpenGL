@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F902B93922772B2D0056AED9 /* blending_transparent_window.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = F902B93822772B260056AED9 /* blending_transparent_window.png */; };
 		F91ACD792237ED4100391BD0 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F97EC32D2083A2950084A898 /* libglfw.3.2.dylib */; };
 		F91ACDE4223B858100391BD0 /* Camera.hpp in Sources */ = {isa = PBXBuildFile; fileRef = F91ACDE0223B68E000391BD0 /* Camera.hpp */; };
 		F91BC66E226E2A8200C6EBC7 /* nanosuit in CopyFiles */ = {isa = PBXBuildFile; fileRef = F91BC66D226E29C700C6EBC7 /* nanosuit */; };
@@ -188,6 +189,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				F902B93922772B2D0056AED9 /* blending_transparent_window.png in CopyFiles */,
 				F925F04822736A930039B29A /* 4.1.1.depth_testing.fs in CopyFiles */,
 				F925F04922736A930039B29A /* 4.1.1.depth_testing.vs in CopyFiles */,
 				F925F04622736A820039B29A /* marble.jpg in CopyFiles */,
@@ -356,6 +358,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F902B93822772B260056AED9 /* blending_transparent_window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blending_transparent_window.png; sourceTree = "<group>"; };
 		F90A972A22678F440019267A /* IOSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IOSystem.hpp; sourceTree = "<group>"; };
 		F90A972B22678F440019267A /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		F90A972C22678F440019267A /* IOStream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IOStream.hpp; sourceTree = "<group>"; };
@@ -767,6 +770,7 @@
 		F95BF9722096F55A00B52272 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F902B93822772B260056AED9 /* blending_transparent_window.png */,
 				F925F04422736A770039B29A /* marble.jpg */,
 				F925F04522736A770039B29A /* metal.png */,
 				F964D507225882E700580BB9 /* matrix.jpg */,

@@ -11,6 +11,8 @@
 #include "asLog.h"
 #include <unistd.h>
 #include <math.h>
+#include <vector>
+#include <map>
 #include "stb_image.h"
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
@@ -107,7 +109,7 @@ unsigned int textureGenarate(const char *imagePath)
         {
             format = GL_RGBA;
         }
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -214,14 +216,36 @@ int createHelloTriangleWindow()
         5.0f, -0.501f, 5.0f, 2.0f, 0.0f,
         -5.0f, -0.501f, -5.0f, 0.0f, 2.0f,
         5.0f, -0.501f, -5.0f, 2.0f, 2.0f};
+    float transparentVertices[] = {
+        // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+        0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+        0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+        1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
 
+        0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+        1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+        1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+    };
     asLog("vertices size: %d", sizeof(cubeVertices));
+
+    // transparent window locations
+    // --------------------------------
+    std::vector<glm::vec3> windows
+    {
+        glm::vec3(-1.5f, 0.0f, -0.48f),
+        glm::vec3( 1.5f, 0.0f, 0.51f),
+        glm::vec3( 0.0f, 0.0f, 0.7f),
+        glm::vec3(-0.3f, 0.0f, -2.3f),
+        glm::vec3( 0.5f, 0.0f, -0.6f)
+    };
     // 顶点数组对象
     unsigned int cubeVao = vaoGenerate(cubeVertices, sizeof(cubeVertices) / sizeof(float));
     unsigned int planeVao = vaoGenerate(planeVertices, sizeof(planeVertices) / sizeof(float));
+    unsigned int windowVao = vaoGenerate(transparentVertices, sizeof(transparentVertices) / sizeof(float));
 
     unsigned int cubeTexture = textureGenarate("marble.jpg");
     unsigned int planeTexture = textureGenarate("metal.png");
+    unsigned int windowTexture = textureGenarate("blending_transparent_window.png");
 
     // uncomment this call to draw in wireframe polygons. 线条模式
     //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -233,6 +257,8 @@ int createHelloTriangleWindow()
 
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LESS);
     
     float expectedFrameTime = 1 / fps;
@@ -297,6 +323,24 @@ int createHelloTriangleWindow()
         model = glm::mat4(1.0f);
         shaderProgram.setMatrix4fv("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        // windows
+        glBindVertexArray(windowVao);
+        glBindTexture(GL_TEXTURE_2D, windowTexture);
+        std::map<float, glm::vec3> sorted;
+        for(size_t i = 0; i < windows.size(); i++)
+        {
+            float distance = glm::length(camera.cameraPos - windows[i]);
+            sorted[distance] = windows[i];
+        }
+
+        for(std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, it->second);
+            shaderProgram.setMatrix4fv("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
         
         glBindVertexArray(0);
 
@@ -305,6 +349,7 @@ int createHelloTriangleWindow()
     }
     glDeleteVertexArrays(1, &cubeVao);
     glDeleteVertexArrays(1, &planeVao);
+    glDeleteVertexArrays(1, &windowVao);
 
     glfwTerminate();
     return 0;
