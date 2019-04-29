@@ -327,6 +327,7 @@ int createHelloTriangleWindow()
         // windows
         glBindVertexArray(windowVao);
         glBindTexture(GL_TEXTURE_2D, windowTexture);
+        // 对窗户位置进行排序，由远往仅渲染
         std::map<float, glm::vec3> sorted;
         for(size_t i = 0; i < windows.size(); i++)
         {
