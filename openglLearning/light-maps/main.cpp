@@ -81,6 +81,8 @@ int createWindow()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // 多重采样缓冲，抗锯齿用
+    glfwWindowHint(GLFW_SAMPLES, 4);
     window = glfwCreateWindow(screenWidth, screenHeight, "Light", NULL, NULL);
     if (window == NULL)
     {
@@ -342,6 +344,7 @@ void drawCube(ShaderProgram &cubeShader, unsigned int vao)
 
 void draw()
 {
+    glEnable(GL_MULTISAMPLE);
     ShaderProgram cubeShader = ShaderProgram("lightMaps.vs", "lightMaps.fs");
     ShaderProgram lampShader = ShaderProgram("cube.vs", "lamp.fs");
     unsigned int lampVAO = genLampVAO(vertices, sizeof(vertices) / sizeof(float));
